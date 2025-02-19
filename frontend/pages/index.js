@@ -57,6 +57,7 @@ export default function Home() {
                                     <Typography variant="h6" fontWeight="bold">{detector.name}</Typography>
                                     <Typography>ID: {detector.id}</Typography>
                                     <Typography>Query: {detector.query || "N/A"}</Typography>
+                                    <Typography>Group: {detector.group_name || "N/A"}</Typography> {/* Group Added Here */}
                                     <Typography>Confidence: {detector.confidence_threshold * 100}%</Typography>
                                     <Typography>Status: {detector.status}</Typography>
                                     <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={() => handleOpenModal(detector)}>
@@ -87,6 +88,7 @@ export default function Home() {
                         </IconButton>
                     </DialogTitle>
                     <DialogContent>
+                        <Typography fontWeight="bold">Group: {selectedDetector.group_name || "N/A"}</Typography> {/* Group Added Here */}
                         <Typography fontWeight="bold">Projected Accuracy: {selectedDetector.projected_accuracy || "N/A"}%</Typography>
                         <Typography fontWeight="bold" color="green">ML Accuracy for "YES": {selectedDetector.accuracy_yes || "N/A"}%</Typography>
                         <Typography fontWeight="bold" color="red">ML Accuracy for "NO": {selectedDetector.accuracy_no || "N/A"}%</Typography>
