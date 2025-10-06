@@ -27,6 +27,9 @@ class Settings(BaseModel):
     appinsights_connection_string: Optional[str] = Field(default=None)
     jwt_secret: str = Field(default="change-me")
 
+    image_query_wait_timeout_seconds: float = Field(default=10.0, ge=0.0)
+    image_query_wait_poll_seconds: float = Field(default=0.5, ge=0.0)
+
     
     def database_url(self) -> str:
         """Return the configured SQLAlchemy database URL."""
@@ -51,6 +54,12 @@ class Settings(BaseModel):
             keyvault_uri=os.getenv("KEYVAULT_URI"),
             appinsights_connection_string=os.getenv("APPINSIGHTS_CONNECTION_STRING"),
             jwt_secret=os.getenv("JWT_SECRET", "change-me"),
+            image_query_wait_timeout_seconds=float(
+                os.getenv("IMAGE_QUERY_WAIT_TIMEOUT_SECONDS", 10.0)
+            ),
+            image_query_wait_poll_seconds=float(
+                os.getenv("IMAGE_QUERY_WAIT_POLL_SECONDS", 0.5)
+            ),
         )
 
 

@@ -3,6 +3,10 @@
 The monorepo currently contains three major workstreams:
 
 * `apps/api` – FastAPI backend. The service exposes an application factory,
+  environment-driven settings, and `/health`, `/v1/detectors`, and
+  `/v1/image-queries` endpoints. SQLAlchemy models and migrations cover the core
+  domain tables (users, detectors, streams, image queries, alerts, escalations,
+  annotations) so persistence work can proceed in small, reviewable increments.
   environment-driven settings, and `/health` plus `/v1/detectors` endpoints.
   SQLAlchemy models and migrations cover the core domain tables (users,
   detectors, streams, image queries, alerts, escalations, annotations) so

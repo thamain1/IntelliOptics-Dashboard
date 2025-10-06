@@ -37,6 +37,9 @@ document its required configuration.
 
 The API now defines the relational schema for IntelliOptics using SQLAlchemy and
 ships an initial Alembic migration so the database can be provisioned in CI and
+local development environments. The first REST surfaces focus on `/v1/detectors`
+and `/v1/image-queries`, demonstrating the persistence layer in action with
+detector CRUD helpers, image submission, retrieval, and long-poll status checks.
 local development environments. The first REST surface focuses on `/v1/detectors`
 create/list/read operations, demonstrating the persistence layer in action.
 local development environments.

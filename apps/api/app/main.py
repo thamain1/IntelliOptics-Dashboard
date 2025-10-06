@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from .config import settings
 from .db import configure_default_engine
+from .routes import detectors, health, image_queries
 from .routes import detectors, health
 from .routes import health
 
@@ -14,6 +15,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title=settings.app_name, version=settings.app_version)
     app.include_router(health.router)
     app.include_router(detectors.router)
+    app.include_router(image_queries.router)
 
     @app.on_event("startup")
     def _configure_database() -> None:

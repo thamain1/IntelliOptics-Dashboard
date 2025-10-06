@@ -7,6 +7,13 @@ import uuid
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from apps.api.app.models import Detector
+from apps.api.app.models.enums import DetectorMode
+from .factories import create_detector, create_user
+
+
+def test_create_detector(client: TestClient, db_session: Session) -> None:
+    user = create_user(db_session)
 from apps.api.app.models import Detector, User
 from apps.api.app.models.enums import DetectorMode, UserRole
 
@@ -46,6 +53,7 @@ def test_create_detector(client: TestClient, db_session: Session) -> None:
 
 
 def test_list_detectors_returns_created_items(client: TestClient, db_session: Session) -> None:
+    detector = create_detector(db_session)
     user = _create_user(db_session)
     detector = Detector(
         name="Gate Monitor",
@@ -66,6 +74,7 @@ def test_list_detectors_returns_created_items(client: TestClient, db_session: Se
     assert len(payload) == 1
     item = payload[0]
     assert item["id"] == detector.public_id
+    assert item["created_by"] == detector.creator.public_id
     assert item["created_by"] == user.public_id
 
 
