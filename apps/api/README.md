@@ -3,6 +3,10 @@
 The IntelliOptics API is a FastAPI service that powers the dashboard, edge
 workers, and automation workflows. The codebase now includes the domain data
 model, SQLAlchemy configuration, and Alembic migrations that describe the core
+IntelliOptics schema. The initial `/v1/detectors`, `/v1/image-queries`, and
+read-only `/v1/alerts` endpoints expose detector CRUD helpers, image
+submission/retrieval, wait polling, and alert visibility backed by these
+models.
 IntelliOptics schema. The initial `/v1/detectors` and `/v1/image-queries`
 endpoints expose detector CRUD helpers plus image submission, retrieval, and
 status polling backed by these models.
@@ -55,6 +59,12 @@ The service currently exposes:
 * `POST /v1/image-queries` – record a snapshot or RTSP reference for downstream inference.
 * `GET /v1/image-queries/{image_query_id}` – retrieve an image query by its `iq-` id.
 * `GET /v1/image-queries/{image_query_id}/wait` – poll for completion with optional `timeout`/`poll` overrides.
+* `GET /v1/alerts/events/recent` – fetch the most recent alerts (20 by default, up to 100).
+* `GET /v1/alerts/{alert_id}` – return a specific alert by its `alrt-` identifier.
+
+Subsequent pull requests will layer authentication, additional alert
+management actions, and remaining CRUD resources following the OpenAPI-first
+workflow described in the project specification.
 
 Subsequent pull requests will layer authentication, remaining CRUD operations,
 and additional resources following the OpenAPI-first workflow described in the
@@ -70,6 +80,7 @@ pytest apps/api/tests
 ```
 
 Tests exercise the FastAPI routers, validate the SQLAlchemy metadata, and cover
+the detector, image query, and alert endpoint behaviours.
 the detector and image query endpoint behaviours.
 the detector endpoint behaviours.
 Tests exercise the FastAPI router and validate the SQLAlchemy metadata so the
