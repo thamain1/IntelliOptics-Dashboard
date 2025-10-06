@@ -1,73 +1,54 @@
-🌟 IntelliOptics Dashboard
+# IntelliOptics Monorepo
 
-A web-based AI-powered dashboard using Groundlight AI for real-time object detection and analytics.
+This repository hosts IntelliOptics, a platform that spans the FastAPI backend,
+the Next.js dashboard, an edge inference worker, and supporting shared
+libraries.
 
-🚀 Features
+## Repository layout
 
-📡 WebSocket Integration for real-time AI updates
+```
+intellioptics-dashboard/
+├─ apps/
+│  ├─ api/   # FastAPI backend (domain models, migrations, health + detector/image-query/alert/stream endpoints, tests)
+│  ├─ web/   # Next.js dashboard (migrated from frontend/)
+│  └─ edge/  # Placeholder for the edge worker import
+├─ libs/
+│  └─ sdk-py/  # IntelliOptics Python SDK (trimmed import)
+├─ functions/
+│  └─ alerts/  # Azure Functions placeholder
+├─ infra/
+│  ├─ bicep/
+│  ├─ helm/
+│  └─ github/
+├─ ops/
+│  ├─ runbooks/
+│  └─ scripts/
+└─ docs/
+   └─ architecture.md
+```
 
-🎨 Modern UI with Radix UI & TailwindCSS
+The edge worker will be imported in smaller follow-up pull requests so the
+review tooling does not choke on binary dependencies. The Python SDK has been
+reintroduced here as a trimmed import that only keeps the actively maintained
+runtime package and tests. Each application folder contains a `.env.example` to
+document its required configuration.
 
-📊 Interactive Graphs using Recharts.js
+The API now defines the relational schema for IntelliOptics using SQLAlchemy and
+ships an initial Alembic migration so the database can be provisioned in CI and
+local development environments. The first REST surfaces focus on `/v1/detectors`,
+`/v1/image-queries`, read-only `/v1/alerts`, and `/v1/streams`, demonstrating the
+persistence layer in action with detector CRUD helpers, image submission,
+retrieval, long-poll status checks, alert visibility, and stream management for
+RTSP configuration.
 
-🔐 Secure API Communication with FastAPI & Socket.io
+### Development quick start
 
-🖥 Deployment Ready (Azure, Docker, GitHub Actions)
+* `apps/api` contains the FastAPI service. Install dependencies with `uv sync`
+or `pip install -e .[dev]`, then run `uvicorn apps.api.app.main:app --reload`.
+  * Use Alembic via `alembic upgrade head` to apply database migrations once
+    `POSTGRES_URL` is configured.
+* `apps/web` contains the Next.js dashboard.
+* `libs/sdk-py` provides the Python SDK and shared messaging contracts.
 
-🛠 Setup & Installation
-1️⃣ Clone the Repository bash Copy Edit
-git clone https://github.com/your-username/IntelliOptics-Dashboard.git
-cd IntelliOptics-Dashboard
-
-2️⃣ Install Backend Dependencies
-bash
-Copy
-Edit
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-3️⃣ Install Frontend Dependencies
-bash
-Copy
-Edit
-cd ../frontend
-npm install
-
-4️⃣ Start Backend Server
-bash
-Copy
-Edit
-cd backend
-uvicorn main:app --reload --host=0.0.0.0 --port=8000
-
-5️⃣ Start Frontend
-bash
-Copy
-Edit
-cd ../frontend
-npm run dev
-
-📡 API Endpoints
-Method	Endpoint	Description
-GET	/api/detectors	Fetch all AI detectors
-POST	/api/submit	Submit an image for analysis
-WebSocket	/socket.io/	Live AI model updates
-
-🎨 UI Preview
-
-💡 Contributing
-Fork the repository 🍴
-Create a feature branch git checkout -b feature-name
-Commit changes git commit -m "Added new feature"
-Push and open a Pull Request
-📝 License
-MIT License - See LICENSE for details.
-
-
-📧 Contact
-👤 Jesse Morgan
-📧 jmorgan@4wardmotion.co
-🌐 thamain1
-
+Refer to the documentation under `docs/` and runbooks under `ops/` for deeper
+platform guidance.
