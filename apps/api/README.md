@@ -6,6 +6,13 @@ model, SQLAlchemy configuration, and Alembic migrations that describe the core
 IntelliOptics schema. The initial `/v1/detectors` and `/v1/image-queries`
 endpoints expose detector CRUD helpers plus image submission, retrieval, and
 status polling backed by these models.
+IntelliOptics schema. The initial `/v1/detectors` endpoints expose create, list,
+and read operations backed by these models.
+IntelliOptics schema.
+workers, and automation workflows. The current implementation provides a
+structured application skeleton with configuration management, a health
+endpoint, and pytest coverage so we can iterate on the authenticated CRUD
+surface in focused follow-up pull requests.
 
 ## Getting started
 
@@ -21,6 +28,7 @@ application automatically initialises the SQLAlchemy engine during startup when
 a database URL is present. Optional `IMAGE_QUERY_WAIT_TIMEOUT_SECONDS` and
 `IMAGE_QUERY_WAIT_POLL_SECONDS` knobs control the `/wait` polling behaviour for
 both production and test environments.
+a database URL is present.
 
 ## Database migrations
 
@@ -51,6 +59,8 @@ The service currently exposes:
 Subsequent pull requests will layer authentication, remaining CRUD operations,
 and additional resources following the OpenAPI-first workflow described in the
 project specification.
+The service exposes `/health` for readiness checks. Application settings are
+loaded from environment variables (see `.env.example`).
 
 ## Running tests
 
@@ -61,3 +71,7 @@ pytest apps/api/tests
 
 Tests exercise the FastAPI routers, validate the SQLAlchemy metadata, and cover
 the detector and image query endpoint behaviours.
+the detector endpoint behaviours.
+Tests exercise the FastAPI router and validate the SQLAlchemy metadata so the
+schema definition cannot drift.
+Tests use FastAPI's `TestClient` to validate routing and payload shapes.

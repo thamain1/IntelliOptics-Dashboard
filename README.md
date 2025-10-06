@@ -10,6 +10,8 @@ libraries.
 intellioptics-dashboard/
 ├─ apps/
 │  ├─ api/   # FastAPI backend (domain models, migrations, health + detector endpoints, tests)
+│  ├─ api/   # FastAPI backend (domain models, migrations, health endpoint, tests)
+│  ├─ api/   # FastAPI backend (application skeleton with health endpoint + tests)
 │  ├─ web/   # Next.js dashboard (migrated from frontend/)
 │  └─ edge/  # Placeholder for the edge worker import
 ├─ libs/
@@ -38,6 +40,9 @@ ships an initial Alembic migration so the database can be provisioned in CI and
 local development environments. The first REST surfaces focus on `/v1/detectors`
 and `/v1/image-queries`, demonstrating the persistence layer in action with
 detector CRUD helpers, image submission, retrieval, and long-poll status checks.
+local development environments. The first REST surface focuses on `/v1/detectors`
+create/list/read operations, demonstrating the persistence layer in action.
+local development environments.
 
 ### Development quick start
 

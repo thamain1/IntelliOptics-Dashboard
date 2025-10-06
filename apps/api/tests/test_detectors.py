@@ -14,6 +14,20 @@ from .factories import create_detector, create_user
 
 def test_create_detector(client: TestClient, db_session: Session) -> None:
     user = create_user(db_session)
+from apps.api.app.models import Detector, User
+from apps.api.app.models.enums import DetectorMode, UserRole
+
+
+def _create_user(session: Session, email: str = "owner@example.com") -> User:
+    user = User(email=email, role=UserRole.ADMIN, password_hash="x")
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+
+def test_create_detector(client: TestClient, db_session: Session) -> None:
+    user = _create_user(db_session)
 
     payload = {
         "name": "Perimeter Watch",
@@ -40,6 +54,17 @@ def test_create_detector(client: TestClient, db_session: Session) -> None:
 
 def test_list_detectors_returns_created_items(client: TestClient, db_session: Session) -> None:
     detector = create_detector(db_session)
+    user = _create_user(db_session)
+    detector = Detector(
+        name="Gate Monitor",
+        mode=DetectorMode.BINARY,
+        query="Notify when gate is open",
+        confidence_threshold=0.6,
+        is_active=True,
+        creator=user,
+    )
+    db_session.add(detector)
+    db_session.commit()
 
     response = client.get("/v1/detectors")
     assert response.status_code == 200
@@ -50,6 +75,7 @@ def test_list_detectors_returns_created_items(client: TestClient, db_session: Se
     item = payload[0]
     assert item["id"] == detector.public_id
     assert item["created_by"] == detector.creator.public_id
+    assert item["created_by"] == user.public_id
 
 
 def test_get_detector_returns_404_for_unknown(client: TestClient) -> None:
