@@ -1,288 +1,134 @@
+"""Typed models used by the IntelliOptics SDK."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
-from importlib import import_module
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
-
-from pydantic import BaseModel, Field
-
-_ConfigDict = getattr(import_module("pydantic"), "ConfigDict", None)
+from typing import Any, Dict, Iterable, Optional, Tuple
 
 
+def _parse_datetime(value: Optional[str]) -> Optional[datetime]:
+    if value is None:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:  # pragma: no cover - defensive guard
+        raise ValueError(f"Invalid datetime value: {value!r}") from exc
 
 
+@dataclass(frozen=True)
+class DetectorCreate:
+    """Data required to create a detector via the API."""
 
-class _BaseModel(BaseModel):
-    """Base model that allows unknown fields for forward compatibility."""
-
-    if _ConfigDict is not None:  # pragma: no branch
-        model_config = _ConfigDict(extra="allow")  # type: ignore[assignment]
-    else:  # pragma: no cover - executed on pydantic v1
-        class Config:
-            extra = "allow"
-
-
-class ModeEnum(str, Enum):
-    BINARY = "BINARY"
-    MULTICLASS = "MULTICLASS"
-    COUNTING = "COUNTING"
-    TEXT = "TEXT"
-    BOUNDING_BOX = "BOUNDING_BOX"
-
-
-class DetectorTypeEnum(str, Enum):
-    DETECTOR = "DETECTOR"
-    EDGE = "EDGE"
-
-
-class StatusEnum(str, Enum):
-    ACTIVE = "ACTIVE"
-    DISABLED = "DISABLED"
-    PAUSED = "PAUSED"
-    DELETED = "DELETED"
-
-
-class BlankEnum(str, Enum):
-    BLANK = ""
-
-
-class ResultTypeEnum(str, Enum):
-    BINARY = "BINARY"
-    COUNTING = "COUNTING"
-    MULTICLASS = "MULTICLASS"
-    TEXT = "TEXT"
-    BOUNDING_BOX = "BOUNDING_BOX"
-
-
-class ImageQueryTypeEnum(str, Enum):
-    IMAGE_QUERY = "IMAGE_QUERY"
-
-
-class ChannelEnum(str, Enum):
-    EMAIL = "EMAIL"
-    TEXT = "TEXT"
-
-
-class SnoozeTimeUnitEnum(str, Enum):
-    SECONDS = "SECONDS"
-    MINUTES = "MINUTES"
-    HOURS = "HOURS"
-    DAYS = "DAYS"
-
-
-class ROI(_BaseModel):
-    label: str
-    top_left: Sequence[float]
-    bottom_right: Sequence[float]
-    confidence: Optional[float] = None
-
-
-class BinaryClassificationResult(_BaseModel):
-    label: Optional[str] = None
-    confidence: Optional[float] = None
-    source: Optional[str] = None
-    human_reviewed: Optional[bool] = None
-    extra: Dict[str, Any] | None = None
-
-
-class CountingResult(_BaseModel):
-    label: Optional[str] = None
-    count: Optional[int] = None
-    confidence: Optional[float] = None
-    extra: Dict[str, Any] | None = None
-
-
-class MultiClassificationResult(_BaseModel):
-    label: Optional[str] = None
-    confidence: Optional[float] = None
-    probabilities: Dict[str, float] | None = None
-
-
-class TextRecognitionResult(_BaseModel):
-    text: Optional[str] = None
-    confidence: Optional[float] = None
-    spans: List[Dict[str, Any]] | None = None
-
-
-class BoundingBoxResult(_BaseModel):
-    label: Optional[str] = None
-    confidence: Optional[float] = None
-    rois: List[ROI] | None = None
-
-
-class Detector(_BaseModel):
-    id: str
     name: str
+    mode: str
     query: str
-    group_name: Optional[str] = None
-    mode: ModeEnum | str
-    confidence_threshold: Optional[float] = Field(default=0.9, ge=0.0, le=1.0)
-    patience_time: Optional[float] = Field(default=30.0, ge=0.0, le=3600.0)
-    metadata: Optional[Dict[str, Any]] = None
-    mode_configuration: Optional[Dict[str, Any]] = None
-    escalation_type: Optional[str] = None
-    status: StatusEnum | BlankEnum | None = None
-    type: DetectorTypeEnum | str = DetectorTypeEnum.DETECTOR
-    created_at: Optional[datetime] = None
+    confidence_threshold: float = 0.5
+    is_active: bool = True
+
+    def to_payload(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "mode": self.mode,
+            "query": self.query,
+            "confidence_threshold": self.confidence_threshold,
+            "is_active": self.is_active,
+        }
 
 
-class DetectorGroup(_BaseModel):
+@dataclass(frozen=True)
+class Detector:
+    """Representation of a detector returned by the API."""
+
     id: str
     name: str
-    description: Optional[str] = None
-
-
-class PaginatedDetectorList(_BaseModel):
-    count: int
-    next: Optional[str] = None
-    previous: Optional[str] = None
-    results: List[Detector] = Field(default_factory=list)
-
-
-class ImageQuery(_BaseModel):
-    id: str
-    detector_id: Optional[str] = None
-    confidence_threshold: Optional[float] = Field(default=0.9)
-    patience_time: Optional[float] = Field(default=30.0, ge=0.0, le=3600.0)
-    created_at: Optional[datetime] = None
-    done_processing: Optional[bool] = False
-    metadata: Optional[Dict[str, Any]] = None
-    query: Optional[str] = None
-    result: (
-        BinaryClassificationResult
-        | CountingResult
-        | MultiClassificationResult
-        | TextRecognitionResult
-        | BoundingBoxResult
-        | None
-    ) = None
-    result_type: Optional[ResultTypeEnum | str] = None
-    status: Optional[str] = None
-    label: Optional[str] = None
-    confidence: Optional[float] = None
-    extra: Dict[str, Any] | None = None
-
-
-class PaginatedImageQueryList(_BaseModel):
-    count: int
-    next: Optional[str] = None
-    previous: Optional[str] = None
-    results: List[ImageQuery] = Field(default_factory=list)
-
-
-class QueryResult(_BaseModel):
-    id: str
-    detector_id: Optional[str] = None
-    status: str
-    result_type: Optional[ResultTypeEnum | str] = None
-    label: Optional[str] = None
-    confidence: Optional[float] = None
-    extra: Dict[str, Any] | None = None
-
-
-class DetectorMetadata(_BaseModel):
-    id: str
-    name: str
-    value: str
-
-
-class ApiKey(_BaseModel):
-    id: str
-    name: str
-    prefix: str
-    created_at: datetime
-
-
-class ApiKeyList(_BaseModel):
-    count: int
-    results: List[ApiKey] = Field(default_factory=list)
-
-
-class UserIdentity(_BaseModel):
-    id: str
-    email: str
-    roles: List[str]
-    tenant: Optional[str] = None
-
-
-class DetectorHealth(_BaseModel):
-    id: str
-    status: str
-    last_heartbeat_at: Optional[datetime] = None
-
-
-class Alert(_BaseModel):
-    id: str
-    detector_id: Optional[str] = None
-    image_query_id: Optional[str] = None
-    status: str
-    message: Optional[str] = None
-    channel: Optional[str] = None
-    created_at: Optional[datetime] = None
-    resolved_at: Optional[datetime] = None
-
-
-class Escalation(_BaseModel):
-    id: str
-    alert_id: str
-    assigned_to: Optional[str] = None
-    notes: Optional[str] = None
-    status: Optional[str] = None
+    mode: str
+    query: str
+    confidence_threshold: float
+    is_active: bool
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
+    @classmethod
+    def from_dict(cls, payload: Dict[str, Any]) -> "Detector":
+        return cls(
+            id=payload["id"],
+            name=payload["name"],
+            mode=payload["mode"],
+            query=payload.get("query", ""),
+            confidence_threshold=float(payload.get("confidence_threshold", 0.0)),
+            is_active=bool(payload.get("is_active", False)),
+            created_at=_parse_datetime(payload.get("created_at")),
+            updated_at=_parse_datetime(payload.get("updated_at")),
+        )
 
-class Annotation(_BaseModel):
+
+@dataclass(frozen=True)
+class ImageQuery:
+    """Metadata describing an image query request."""
+
     id: str
-    image_query_id: str
-    label_json: Dict[str, Any]
-    annotator_id: Optional[str] = None
+    detector_id: str
+    snapshot_url: Optional[str]
+    created_at: Optional[datetime] = None
+    processed_at: Optional[datetime] = None
+
+    @classmethod
+    def from_dict(cls, payload: Dict[str, Any]) -> "ImageQuery":
+        return cls(
+            id=payload["id"],
+            detector_id=payload["detector_id"],
+            snapshot_url=payload.get("snapshot_url"),
+            created_at=_parse_datetime(payload.get("created_at")),
+            processed_at=_parse_datetime(payload.get("processed_at")),
+        )
+
+
+@dataclass(frozen=True)
+class ImageQueryResult:
+    """Final answer returned from the API when an image query completes."""
+
+    id: str
+    answer: str
+    score: Optional[float] = None
+    processed_at: Optional[datetime] = None
+
+    @classmethod
+    def from_dict(cls, payload: Dict[str, Any]) -> "ImageQueryResult":
+        return cls(
+            id=payload["id"],
+            answer=payload.get("answer", "UNKNOWN"),
+            score=payload.get("score"),
+            processed_at=_parse_datetime(payload.get("processed_at")),
+        )
+
+
+@dataclass(frozen=True)
+class AlertEvent:
+    """Simplified alert event representation returned from the API."""
+
+    id: str
+    detector_id: str
+    message: str
+    status: str
+    channel: Optional[str] = None
     created_at: Optional[datetime] = None
 
-
-class Stream(_BaseModel):
-    id: str
-    name: str
-    rtsp_url: Optional[str] = None
-    zone_masks: Optional[Dict[str, Any]] = None
-    is_active: Optional[bool] = None
-    created_at: Optional[datetime] = None
-
-
-class PaginatedStreamList(_BaseModel):
-    count: int
-    next: Optional[str] = None
-    previous: Optional[str] = None
-    results: List[Stream] = Field(default_factory=list)
+    @classmethod
+    def from_dict(cls, payload: Dict[str, Any]) -> "AlertEvent":
+        return cls(
+            id=payload["id"],
+            detector_id=payload.get("detector_id", ""),
+            message=payload.get("message", ""),
+            status=payload.get("status", ""),
+            channel=payload.get("channel"),
+            created_at=_parse_datetime(payload.get("created_at")),
+        )
 
 
-class HumanReviewPolicy(Enum):
-    DEFAULT = "DEFAULT"
-    ALWAYS = "ALWAYS"
-    NEVER = "NEVER"
+def parse_detectors(payload: Iterable[Dict[str, Any]]) -> Tuple[Detector, ...]:
+    return tuple(Detector.from_dict(item) for item in payload)
 
 
-class HumanReviewSettings(_BaseModel):
-    policy: HumanReviewPolicy | str = HumanReviewPolicy.DEFAULT
-    instructions: Optional[str] = None
-
-
-@dataclass
-class Pagination:
-    count: int
-    next: Optional[str]
-    previous: Optional[str]
-
-
-@dataclass
-class PaginatedResponse:
-    pagination: Pagination
-    results: Iterable[Any]
-
-
-@dataclass
-class SubmitImageQueryResponse:
-    image_query: ImageQuery
-    result: Optional[QueryResult]
+def parse_alerts(payload: Iterable[Dict[str, Any]]) -> Tuple[AlertEvent, ...]:
+    return tuple(AlertEvent.from_dict(item) for item in payload)

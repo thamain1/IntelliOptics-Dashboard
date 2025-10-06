@@ -11,3 +11,4 @@ __pycache__/
 **/_inventory/
 *.db
 *.zip
+*.egg-info/
