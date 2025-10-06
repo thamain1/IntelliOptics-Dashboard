@@ -1,5 +1,27 @@
 # IntelliOptics API
 
-This directory will host the FastAPI application implementing the IntelliOptics public and internal endpoints.
+The IntelliOptics API is a FastAPI service that powers the dashboard, edge
+workers, and automation workflows. The current implementation provides a
+structured application skeleton with configuration management, a health
+endpoint, and pytest coverage so we can iterate on the authenticated CRUD
+surface in focused follow-up pull requests.
 
-The legacy experimental FastAPI app under `backend/` has been removed to make room for the production service implementation.
+## Getting started
+
+```bash
+cd apps/api
+uv sync  # or pip install -e .[dev]
+uvicorn apps.api.app.main:app --reload
+```
+
+The service exposes `/health` for readiness checks. Application settings are
+loaded from environment variables (see `.env.example`).
+
+## Running tests
+
+```bash
+cd /workspace/IntelliOptics-Dashboard
+pytest apps/api/tests
+```
+
+Tests use FastAPI's `TestClient` to validate routing and payload shapes.
