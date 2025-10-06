@@ -27,6 +27,14 @@ class Settings(BaseModel):
     appinsights_connection_string: Optional[str] = Field(default=None)
     jwt_secret: str = Field(default="change-me")
 
+    
+    def database_url(self) -> str:
+        """Return the configured SQLAlchemy database URL."""
+
+        if self.postgres_url.startswith("postgresql://"):
+            return self.postgres_url.replace("postgresql://", "postgresql+psycopg://", 1)
+        return self.postgres_url
+
     @classmethod
     def from_env(cls) -> "Settings":
         """Create a settings object using environment variables."""

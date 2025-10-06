@@ -9,6 +9,7 @@ libraries.
 ```
 intellioptics-dashboard/
 ├─ apps/
+│  ├─ api/   # FastAPI backend (domain models, migrations, health endpoint, tests)
 │  ├─ api/   # FastAPI backend (application skeleton with health endpoint + tests)
 │  ├─ web/   # Next.js dashboard (migrated from frontend/)
 │  └─ edge/  # Placeholder for the edge worker import
@@ -33,10 +34,16 @@ reintroduced here as a trimmed import that only keeps the actively maintained
 runtime package and tests. Each application folder contains a `.env.example` to
 document its required configuration.
 
+The API now defines the relational schema for IntelliOptics using SQLAlchemy and
+ships an initial Alembic migration so the database can be provisioned in CI and
+local development environments.
+
 ### Development quick start
 
 * `apps/api` contains the FastAPI service. Install dependencies with `uv sync`
 or `pip install -e .[dev]`, then run `uvicorn apps.api.app.main:app --reload`.
+  * Use Alembic via `alembic upgrade head` to apply database migrations once
+    `POSTGRES_URL` is configured.
 * `apps/web` contains the Next.js dashboard.
 * `libs/sdk-py` provides the Python SDK and shared messaging contracts.
 
