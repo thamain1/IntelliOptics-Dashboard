@@ -1,4 +1,4 @@
-# IntelliOptics Monorepo
+# IntelliOptics Single Deploy
 
 This repository hosts IntelliOptics, a platform that spans the FastAPI backend,
 the Next.js dashboard, an edge inference worker, and supporting shared
