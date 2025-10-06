@@ -10,6 +10,10 @@ libraries.
 intellioptics-dashboard/
 ├─ apps/
 │  ├─ api/   # FastAPI backend (domain models, migrations, health + detector/image-query/alert/stream endpoints, tests)
+│  ├─ api/   # FastAPI backend (domain models, migrations, health + detector/image-query/alert endpoints, tests)
+│  ├─ api/   # FastAPI backend (domain models, migrations, health + detector endpoints, tests)
+│  ├─ api/   # FastAPI backend (domain models, migrations, health endpoint, tests)
+│  ├─ api/   # FastAPI backend (application skeleton with health endpoint + tests)
 │  ├─ web/   # Next.js dashboard (migrated from frontend/)
 │  └─ edge/  # Placeholder for the edge worker import
 ├─ libs/
@@ -40,6 +44,15 @@ local development environments. The first REST surfaces focus on `/v1/detectors`
 persistence layer in action with detector CRUD helpers, image submission,
 retrieval, long-poll status checks, alert visibility, and stream management for
 RTSP configuration.
+`/v1/image-queries`, and read-only `/v1/alerts`, demonstrating the persistence
+layer in action with detector CRUD helpers, image submission, retrieval, long-
+poll status checks, and alert visibility for the dashboard.
+local development environments. The first REST surfaces focus on `/v1/detectors`
+and `/v1/image-queries`, demonstrating the persistence layer in action with
+detector CRUD helpers, image submission, retrieval, and long-poll status checks.
+local development environments. The first REST surface focuses on `/v1/detectors`
+create/list/read operations, demonstrating the persistence layer in action.
+local development environments.
 
 ### Development quick start
 

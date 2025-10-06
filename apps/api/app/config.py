@@ -30,6 +30,7 @@ class Settings(BaseModel):
     image_query_wait_timeout_seconds: float = Field(default=10.0, ge=0.0)
     image_query_wait_poll_seconds: float = Field(default=0.5, ge=0.0)
 
+    
     def database_url(self) -> str:
         """Return the configured SQLAlchemy database URL."""
 

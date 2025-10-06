@@ -8,6 +8,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from apps.api.app.db import Base, configure_engine, get_engine, get_session_factory
+
+import pytest
+from fastapi.testclient import TestClient
+
 from apps.api.app.main import create_app
 
 
@@ -29,6 +33,7 @@ def database(tmp_path: Path) -> Iterator[None]:
 
 @pytest.fixture()
 def client(database: None) -> Iterator[TestClient]:
+def client() -> Iterator[TestClient]:
     """Provide a FastAPI test client for request/response assertions."""
 
     with TestClient(create_app()) as client:
