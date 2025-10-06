@@ -8,6 +8,7 @@ The monorepo currently contains three major workstreams:
   describing the core domain tables (users, detectors, streams, image queries,
   alerts, escalations, annotations) so persistence work can proceed in small,
   reviewable increments.
+  coverage so we can add authenticated business endpoints incrementally.
 * `apps/web` – Next.js dashboard (port of the original frontend).
 * `libs/sdk-py` – Python SDK with the REST client and shared Service Bus
   message contracts.
@@ -15,3 +16,6 @@ The monorepo currently contains three major workstreams:
 Upcoming pull requests will extend the API with authentication, persistence
 operations, and Service Bus integrations before reconnecting the edge worker
 import and infrastructure definitions.
+Upcoming pull requests will extend the API with authentication, persistence,
+and Service Bus integrations before reconnecting the edge worker import and
+infrastructure definitions.

@@ -10,6 +10,7 @@ libraries.
 intellioptics-dashboard/
 ├─ apps/
 │  ├─ api/   # FastAPI backend (domain models, migrations, health endpoint, tests)
+│  ├─ api/   # FastAPI backend (application skeleton with health endpoint + tests)
 │  ├─ web/   # Next.js dashboard (migrated from frontend/)
 │  └─ edge/  # Placeholder for the edge worker import
 ├─ libs/
