@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000";
 
 export default function Home() {
     const [detectors, setDetectors] = useState([]);
@@ -40,7 +40,7 @@ export default function Home() {
             {/* App Bar with Centered Logo */}
             <AppBar position="static" sx={{ backgroundColor: "#000", padding: 2 }}>
                 <Toolbar sx={{ flexDirection: "column", alignItems: "center" }}>
-                    <img src="/4ward_logo.jpg" alt="IntelliOptics & 4wardmotion Solutions Logo" className="h-16 mb-2" />
+                    <img src="/4ward_logo.svg" alt="IntelliOptics Wordmark" className="h-16 mb-2" />
                     <Typography variant="h4" component="div" sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
                         IntelliOptics Dashboard
                     </Typography>
