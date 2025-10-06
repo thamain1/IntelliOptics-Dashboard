@@ -25,6 +25,18 @@ def create_user(
 
     chosen_email = email or f"owner-{uuid.uuid4().hex}@example.com"
     user = User(email=chosen_email, role=role, password_hash="x")
+from typing import Optional
+
+from sqlalchemy.orm import Session
+
+from apps.api.app.models import Detector, Stream, User
+from apps.api.app.models.enums import DetectorMode, UserRole
+
+
+def create_user(session: Session, email: str = "owner@example.com", role: UserRole = UserRole.ADMIN) -> User:
+    """Persist and return a user instance for tests."""
+
+    user = User(email=email, role=role, password_hash="x")
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -35,6 +47,7 @@ def create_detector(
     session: Session,
     *,
     creator: User | None = None,
+    creator: Optional[User] = None,
     name: str = "Perimeter Watch",
     query: str = "Alert when a person crosses the fence",
     mode: DetectorMode = DetectorMode.BINARY,
@@ -64,6 +77,7 @@ def create_stream(
     name: str = "Loading Dock",
     rtsp_url: str = "rtsp://camera.example/stream",
     zone_masks: dict | None = None,
+    zone_masks: Optional[dict] = None,
     is_active: bool = True,
 ) -> Stream:
     """Persist a stream record suitable for associations."""
@@ -133,3 +147,4 @@ __all__ = [
     "create_stream",
     "create_user",
 ]
+__all__ = ["create_user", "create_detector", "create_stream"]

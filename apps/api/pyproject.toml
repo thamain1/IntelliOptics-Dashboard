@@ -9,6 +9,7 @@ dependencies = [
     "pydantic>=2.5",
     "sqlalchemy>=2.0",
     "psycopg[binary]>=3.1",
+    "asyncpg>=0.29",
     "alembic>=1.13",
 ]
 
@@ -25,3 +26,4 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 packages = ["apps", "apps.api", "apps.api.app"]
 package-dir = {"apps" = "..", "apps.api" = ".", "apps.api.app" = "app"}
+packages = ["apps.api.app"]

@@ -5,6 +5,9 @@ from fastapi import FastAPI
 from .config import settings
 from .db import configure_default_engine
 from .routes import alerts, detectors, health, image_queries
+from .routes import detectors, health, image_queries
+from .routes import detectors, health
+from .routes import health
 
 
 def create_app() -> FastAPI:
