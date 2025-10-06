@@ -3,3 +3,6 @@
 from . import detectors, health
 
 __all__ = ["detectors", "health"]
+from . import health
+
+__all__ = ["health"]

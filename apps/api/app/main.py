@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from .config import settings
 from .db import configure_default_engine
 from .routes import detectors, health
+from .routes import health
 
 
 def create_app() -> FastAPI:

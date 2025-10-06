@@ -5,6 +5,11 @@ workers, and automation workflows. The codebase now includes the domain data
 model, SQLAlchemy configuration, and Alembic migrations that describe the core
 IntelliOptics schema. The initial `/v1/detectors` endpoints expose create, list,
 and read operations backed by these models.
+IntelliOptics schema.
+workers, and automation workflows. The current implementation provides a
+structured application skeleton with configuration management, a health
+endpoint, and pytest coverage so we can iterate on the authenticated CRUD
+surface in focused follow-up pull requests.
 
 ## Getting started
 
@@ -45,6 +50,8 @@ The service currently exposes:
 Subsequent pull requests will layer authentication, remaining CRUD operations,
 and additional resources following the OpenAPI-first workflow described in the
 project specification.
+The service exposes `/health` for readiness checks. Application settings are
+loaded from environment variables (see `.env.example`).
 
 ## Running tests
 
@@ -55,3 +62,6 @@ pytest apps/api/tests
 
 Tests exercise the FastAPI routers, validate the SQLAlchemy metadata, and cover
 the detector endpoint behaviours.
+Tests exercise the FastAPI router and validate the SQLAlchemy metadata so the
+schema definition cannot drift.
+Tests use FastAPI's `TestClient` to validate routing and payload shapes.
