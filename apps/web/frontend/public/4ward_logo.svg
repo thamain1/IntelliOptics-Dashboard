@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" role="img" aria-labelledby="title desc">
+  <title id="title">IntelliOptics and 4wardmotion Solutions</title>
+  <desc id="desc">Simplified logomark used as a placeholder until design assets arrive.</desc>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="25" width="86" height="70" rx="14" fill="url(#gradient)" opacity="0.9" />
+  <circle cx="51" cy="60" r="22" fill="#fff" opacity="0.92" />
+  <circle cx="51" cy="60" r="11" fill="#0f172a" opacity="0.9" />
+  <path d="M108 44h44" stroke="#0f172a" stroke-width="6" stroke-linecap="round" opacity="0.5" />
+  <path d="M108 72h70" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" opacity="0.5" />
+  <text x="160" y="56" font-size="28" font-family="'Segoe UI', 'Helvetica Neue', sans-serif" fill="#0f172a" text-anchor="start">IntelliOptics</text>
+  <text x="160" y="88" font-size="20" font-family="'Segoe UI', 'Helvetica Neue', sans-serif" fill="#1f2937" text-anchor="start">× 4wardmotion</text>
+</svg>
