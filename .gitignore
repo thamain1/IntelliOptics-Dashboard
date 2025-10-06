@@ -1,7 +1,13 @@
 .next/
 node_modules/
-frontend/node_modules/
-frontend/.next/
-node_modules/
-frontend/node_modules/
-frontend/.next/
+apps/web/node_modules/
+apps/web/.next/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# Generated data / archives
+**/_inventory/
+*.db
+*.zip
