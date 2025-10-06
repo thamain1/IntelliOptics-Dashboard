@@ -3,6 +3,7 @@
 from .alert import AlertRead
 from .detector import DetectorCreate, DetectorRead
 from .image_query import ImageQueryCreate, ImageQueryRead, ImageQueryWaitResponse
+from .stream import StreamCreate, StreamRead, StreamUpdate
 
 __all__ = [
     "AlertRead",
@@ -11,4 +12,7 @@ __all__ = [
     "ImageQueryCreate",
     "ImageQueryRead",
     "ImageQueryWaitResponse",
+    "StreamCreate",
+    "StreamRead",
+    "StreamUpdate",
 ]

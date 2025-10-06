@@ -3,6 +3,10 @@
 The IntelliOptics API is a FastAPI service that powers the dashboard, edge
 workers, and automation workflows. The codebase now includes the domain data
 model, SQLAlchemy configuration, and Alembic migrations that describe the core
+IntelliOptics schema. The initial `/v1/detectors`, `/v1/image-queries`, read-only
+`/v1/alerts`, and `/v1/streams` endpoints expose detector CRUD helpers, image
+submission/retrieval, wait polling, alert visibility, and RTSP stream management
+backed by these models.
 IntelliOptics schema. The initial `/v1/detectors`, `/v1/image-queries`, and
 read-only `/v1/alerts` endpoints expose detector CRUD helpers, image
 submission/retrieval, wait polling, and alert visibility backed by these
@@ -61,6 +65,10 @@ The service currently exposes:
 * `GET /v1/image-queries/{image_query_id}/wait` – poll for completion with optional `timeout`/`poll` overrides.
 * `GET /v1/alerts/events/recent` – fetch the most recent alerts (20 by default, up to 100).
 * `GET /v1/alerts/{alert_id}` – return a specific alert by its `alrt-` identifier.
+* `GET /v1/streams` – list configured RTSP streams ordered by creation time.
+* `GET /v1/streams/{stream_id}` – fetch a stream by its `str-` identifier.
+* `POST /v1/streams` – create a new stream definition.
+* `PATCH /v1/streams/{stream_id}` – partially update an existing stream.
 
 Subsequent pull requests will layer authentication, additional alert
 management actions, and remaining CRUD resources following the OpenAPI-first
@@ -80,6 +88,7 @@ pytest apps/api/tests
 ```
 
 Tests exercise the FastAPI routers, validate the SQLAlchemy metadata, and cover
+the detector, image query, alert, and stream endpoint behaviours.
 the detector, image query, and alert endpoint behaviours.
 the detector and image query endpoint behaviours.
 the detector endpoint behaviours.

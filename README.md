@@ -9,6 +9,7 @@ libraries.
 ```
 intellioptics-dashboard/
 ├─ apps/
+│  ├─ api/   # FastAPI backend (domain models, migrations, health + detector/image-query/alert/stream endpoints, tests)
 │  ├─ api/   # FastAPI backend (domain models, migrations, health + detector/image-query/alert endpoints, tests)
 │  ├─ api/   # FastAPI backend (domain models, migrations, health + detector endpoints, tests)
 │  ├─ api/   # FastAPI backend (domain models, migrations, health endpoint, tests)
@@ -39,6 +40,10 @@ document its required configuration.
 The API now defines the relational schema for IntelliOptics using SQLAlchemy and
 ships an initial Alembic migration so the database can be provisioned in CI and
 local development environments. The first REST surfaces focus on `/v1/detectors`,
+`/v1/image-queries`, read-only `/v1/alerts`, and `/v1/streams`, demonstrating the
+persistence layer in action with detector CRUD helpers, image submission,
+retrieval, long-poll status checks, alert visibility, and stream management for
+RTSP configuration.
 `/v1/image-queries`, and read-only `/v1/alerts`, demonstrating the persistence
 layer in action with detector CRUD helpers, image submission, retrieval, long-
 poll status checks, and alert visibility for the dashboard.
