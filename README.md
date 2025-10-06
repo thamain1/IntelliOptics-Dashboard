@@ -9,6 +9,7 @@ libraries.
 ```
 intellioptics-dashboard/
 ├─ apps/
+│  ├─ api/   # FastAPI backend (domain models, migrations, health + detector endpoints, tests)
 │  ├─ api/   # FastAPI backend (domain models, migrations, health endpoint, tests)
 │  ├─ api/   # FastAPI backend (application skeleton with health endpoint + tests)
 │  ├─ web/   # Next.js dashboard (migrated from frontend/)
@@ -36,6 +37,8 @@ document its required configuration.
 
 The API now defines the relational schema for IntelliOptics using SQLAlchemy and
 ships an initial Alembic migration so the database can be provisioned in CI and
+local development environments. The first REST surface focuses on `/v1/detectors`
+create/list/read operations, demonstrating the persistence layer in action.
 local development environments.
 
 ### Development quick start
