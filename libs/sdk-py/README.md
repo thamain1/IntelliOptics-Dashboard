@@ -9,6 +9,7 @@ in the platform today:
   and `/v1/alerts/events/recent` endpoints.
 * `IntelliOpticsAsyncClient` – async mirror that can be reused by automation and tests.
 * Dataclass models that translate JSON responses into typed Python objects.
+* Shared Service Bus message contracts for inference job/result topics.
 
 The goal is to provide a realistic but minimal reference while the full SDK is re-imported in smaller,
 reviewable slices.
