@@ -12,6 +12,7 @@ intellioptics-dashboard/
 │  └─ edge/  # Placeholder for the edge worker import
 ├─ libs/
 │  └─ sdk-py/  # IntelliOptics Python SDK (trimmed import)
+│  └─ sdk-py/  # Placeholder for the Python SDK
 ├─ functions/
 │  └─ alerts/  # Azure Functions placeholder
 ├─ infra/
