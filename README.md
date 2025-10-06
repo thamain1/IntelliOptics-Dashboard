@@ -7,7 +7,7 @@ This repository hosts IntelliOptics, a platform that spans the FastAPI backend, 
 ```
 intellioptics-dashboard/
 ├─ apps/
-│  ├─ api/   # FastAPI backend (migrated from backend/)
+│  ├─ api/   # FastAPI backend (production implementation under construction)
 │  ├─ web/   # Next.js dashboard (migrated from frontend/)
 │  └─ edge/  # Placeholder for the edge worker import
 ├─ libs/
